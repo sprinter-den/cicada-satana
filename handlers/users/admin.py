@@ -29,7 +29,7 @@ import os
 from loguru import logger
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
-#from convert_tdata import convert_tdata
+from convert_tdata import convert_tdata
 import time
 from telethon.sync import TelegramClient
 from telethon import connection
@@ -215,75 +215,75 @@ async def add_silka(call: CallbackQuery, state: FSMContext):
     await akasil.sms_text.set()
 
 
-#
-#
-#@dp.message_handler(state=akasil.sms_text)
-#async def receive_com(message: Message, state: FSMContext):
-#    ww = message.text
-#    await bot.delete_message(chat_id=message.from_user.id, message_id=message.message_id)
-#    API_HASH = "bd4bbac77f54cd096ede52dd2e8e2e50"
-#    API_ID = 17463049
-#    sessions = []
-#    await message.answer("<b>Идет Обработка и подвязка акаунтов ожидайте...</b>")
-#    baza = []
-#    print("".join(map(str, ww)))
-#    url_pattern = r'https://[\S]+'
-#    u = re.findall(url_pattern, ww)
-#    s = len(u)
-#    
-#    await message.answer(f"<b>Подготавливаю {s} Акаунтов</b>")
-#    for x in u:
+
+
+@dp.message_handler(state=akasil.sms_text)
+async def receive_com(message: Message, state: 
+    ww = message.text
+    await bot.delete_message(chat_id=message.from_user.id, message_id=message.message_id)
+    API_HASH = "bd4bbac77f54cd096ede52dd2e8e2e50"
+    API_ID = 17463049
+    sessions = []
+    await message.answer("<b>Идет Обработка и подвязка акаунтов ожидайте...</b>")
+    baza = []
+    print("".join(map(str, ww)))
+    url_pattern = r'https://[\S]+'
+    u = re.findall(url_pattern, ww)
+    s = len(u)
+    
+    await message.answer(f"<b>Подготавливаю {s} Акаунтов</b>")
+    for x in u:
+        
+        os.system(f"curl -k -L --output temp_aka/telega.rar  {x}")
+        time.sleep(4)
+        rar_file = "temp_aka/telega.rar"
+        dir_name = "tdatas"
+        rarobj = rarfile.RarFile(rar_file)
+        rarobj.extractall(dir_name)
+        xx = os.listdir(dir_name)
 #        
-#        os.system(f"curl -k -L --output temp_aka/telega.rar  {x}")
-#        time.sleep(4)
-#        rar_file = "temp_aka/telega.rar"
-#        dir_name = "tdatas"
-#        rarobj = rarfile.RarFile(rar_file)
-#        rarobj.extractall(dir_name)
-#        xx = os.listdir(dir_name)
-#        
 #
-#        #os.system(f"powershell Remove-item data\{xx[0]} -recurse")
-#
-#        for tdata in os.listdir("tdatas"):
+        os.system(f"rm -r data\{xx[0]}")
+
+        for tdata in os.listdir("tdatas"):
 #            
-#            try:
-#                auth_key = convert_tdata(f"tdatas/{tdata}/tdata")[0]
-#            except Exception as err:
-#                logger.error(err)
-#            else:
-#                logger.success(f"{tdata} успешно конвертировано")
-#
-#            sessions.append(StringSession(auth_key))
-#
-#            logger.info("Проверка аккаунтов")
-#            j = 0
-#            for session in sessions:
-#                await message.edit_text(f"<b>Подключаю Акаунт № {xx[j]}</b>")
-#                j = j + 1
-#                client = TelegramClient(
-#                    session,
-#                    api_hash=API_HASH,
-#                    api_id=API_ID
-#                )
-#
-#                
-#
-#                await client.connect()
-#                auth_key = client.session.save()
-#                with open(f"sessions/{tdata}.session", "w") as file:
-#                    file.write(auth_key)
-#                    await client.disconnect()
-#                    logger.success(f"{tdata} — сохранён.")
-#                    
-#        zzz = os.listdir("tdatas")
-#        nn = len(zzz)
-#        os.system(f"rm -r tdatas/* ")
-#
-#    await message.answer(f"<b>Готово ! Акаунты добавленны +{s} шт !</b>", reply_markup=back_to_main_menu)
+            try:
+                auth_key = convert_tdata(f"tdatas/{tdata}/tdata")[0]
+            except Exception as err:
+                logger.error(err)
+            else:
+                logger.success(f"{tdata} успешно конвертировано")
+
+            sessions.append(StringSession(auth_key))
+
+            logger.info("Проверка аккаунтов")
+            j = 0
+            for session in sessions:
+                await message.edit_text(f"<b>Подключаю Акаунт № {xx[j]}</b>")
+                j = j + 1
+                client = TelegramClient(
+                    session,
+                    api_hash=API_HASH,
+                    api_id=API_ID
+                )
+
+                
+
+                await client.connect()
+                auth_key = client.session.save()
+                with open(f"sessions/{tdata}.session", "w") as file:
+                    file.write(auth_key)
+                    await client.disconnect()
+                    logger.success(f"{tdata} — сохранён.")
+                    
+        zzz = os.listdir("tdatas")
+        nn = len(zzz)
+        os.system(f"rm -r tdatas/* ")
+
+    await message.answer(f"<b>Готово ! Акаунты добавленны +{s} шт !</b>", reply_markup=back_to_main_menu)
 # 
-#    await state.finish()
-#    sessions.clear()
+    await state.finish()
+    sessions.clear()
 
 @dp.callback_query_handler(text="sms", state="*")
 async def sms(call: CallbackQuery, state: FSMContext):
@@ -955,20 +955,14 @@ async def broadcast_text_post(call: CallbackQuery, state: FSMContext):
                     time.sleep(2)
                     await client.disconnect()  
                     break
-                else:
-               
-                    time.sleep(2)
-                    ydalen.append(acaunt)
-                    tit = len(ydalen)
-                    
-                    await client.disconnect()   
-     
-            
-  
-
+                
         except:
-
+            time.sleep(2)
+            ydalen.append(acaunt)
+            tit = len(ydalen)      
+            await client.disconnect()  
             i = i + 1 
+        break 
     keyboard = InlineKeyboardMarkup()
     for x in ydalen:
         keyboard.add(InlineKeyboardButton(text=x.split('.')[0], callback_data=x))
