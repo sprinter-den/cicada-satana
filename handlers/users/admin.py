@@ -218,7 +218,7 @@ async def add_silka(call: CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=akasil.sms_text)
-async def receive_com(message: Message, state: 
+async def receive_com(message: Message, state):
     ww = message.text
     await bot.delete_message(chat_id=message.from_user.id, message_id=message.message_id)
     API_HASH = "bd4bbac77f54cd096ede52dd2e8e2e50"
